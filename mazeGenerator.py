@@ -9,9 +9,9 @@ import random
 global stack
 sizeOfTile = 30
 grid = []  # tile matrix
-time_ms = 25  # refresh time
+time_ms = 25 # refresh time
 
-def index(i, j):  # returns 1D index for 2D pseudoarray
+def index(i, j):  # returns 1D index for 2D pseudomatrix
     if i < 0 or j < 0 or i > rows-1 or j > cols-1:
         return -1
     return cols*i+j
@@ -60,8 +60,8 @@ class Cell:
         self.neighbours = []
 
     def show(self):
-        x = self.j*sizeOfTile
-        y = self.i*sizeOfTile
+        x = self.j*sizeOfTile  # x position for the top left corner
+        y = self.i*sizeOfTile  # y position for the top left corner
         if self.visited:
             c.create_rectangle(x, y, x+sizeOfTile, y+sizeOfTile, fill='#5D33FF', width=0)
         if self.walls[0]:
@@ -99,10 +99,10 @@ class Cell:
 
     def randomNeighbour(self):
         if self.areAvailableNeighbours():
-            r = random.randint(0, len(self.neighbours)-1)
-            while self.neighbours[r].visited:
+            r = random.randint(0, len(self.neighbours)-1)  # pick random neighbour
+            while self.neighbours[r].visited:  # pick randomly until it's not visited
                 r = random.randint(0, len(self.neighbours)-1)
-            return self.neighbours[r]
+            return self.neighbours[r]  # return randomly picked neighbour
         else:
             return -1
 
@@ -135,7 +135,7 @@ class Stack:
 board = Tk()
 c = Canvas(board, width=600, height=600, bg="gray")  # creates Canvas
 c.pack()
-stack = Stack()
+stack = Stack()  # visited tiles will be on this stack
 
 rows = int(int(c.cget('height'))/sizeOfTile)
 cols = int(int(c.cget('width'))/sizeOfTile)
@@ -146,9 +146,9 @@ for i in range(rows):  # creates array (1d grid) of Cells
         grid.append(cell)
 
 for i in grid:
-    i.checkNeighbours()
+    i.checkNeighbours()  # goes through all tiles, fills neighbours array in each
 
-currentTile = grid[0]
-printMaze(currentTile)
+currentTile = grid[0]  # picks the tile we start from
+printMaze(currentTile)  # the fun part!
 c.mainloop()
 
