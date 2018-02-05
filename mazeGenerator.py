@@ -1,5 +1,7 @@
 '''
-
+Recursive Maze Generator
+Author: Filip Hein
+5.02.2018r.
 '''
 from tkinter import *
 import random
