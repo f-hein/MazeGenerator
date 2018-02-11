@@ -12,7 +12,7 @@ import sys
 sys.setrecursionlimit(10000)
 global stack
 sizeOfTile = 10
-sizeOfMaze = 600
+sizeOfMaze = 600  # value x value canvas size
 grid = []  # tile matrix
 time_ms = 0  # refresh time
 
