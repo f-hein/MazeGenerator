@@ -3,13 +3,19 @@ Recursive Maze Generator
 Author: Filip Hein
 5.02.2018r.
 '''
+
+
 from tkinter import *
 import random
+import sys
 
+sys.setrecursionlimit(10000)
 global stack
-sizeOfTile = 30
+sizeOfTile = 10
+sizeOfMaze = 600
 grid = []  # tile matrix
-time_ms = 25 # refresh time
+time_ms = 0  # refresh time
+
 
 def index(i, j):  # returns 1D index for 2D pseudomatrix
     if i < 0 or j < 0 or i > rows-1 or j > cols-1:
@@ -18,16 +24,16 @@ def index(i, j):  # returns 1D index for 2D pseudomatrix
 
 
 def deleteWall(current, next):
-    if current.i - next.i == 1: # if upper neighbour
+    if current.i - next.i == 1:  # if upper neighbour
         current.walls[0] = False
         next.walls[2] = False
-    elif current.i - next.i == -1: # lower nb
+    elif current.i - next.i == -1:  # lower nb
         current.walls[2] = False
         next.walls[0] = False
-    if current.j - next.j == 1: # left nb
+    if current.j - next.j == 1:  # left nb
         current.walls[3] = False
         next.walls[1] = False
-    elif current.j - next.j == -1: # right nb
+    elif current.j - next.j == -1:  # right nb
         current.walls[1] = False
         next.walls[3] = False
     c.update()
@@ -36,7 +42,7 @@ def deleteWall(current, next):
 def printMaze(current):
     current.visited = True
     nextTile = current.randomNeighbour()
-    if (nextTile != -1):  # if nextTile exists
+    if nextTile != -1:  # if nextTile exists
         stack.push(current)  # push to stack
         deleteWall(current, nextTile)
         current.leadTile()  # print leadTile
@@ -49,6 +55,7 @@ def printMaze(current):
     else:
         print("Maze done!")
         return 0
+
 
 class Cell:
 
@@ -75,13 +82,11 @@ class Cell:
         c.after(time_ms)
         c.update()
 
-
     def leadTile(self):
         x = self.j * sizeOfTile
         y = self.i * sizeOfTile
         c.create_rectangle(x, y, x+sizeOfTile, y+sizeOfTile, fill='#FF0000', width=0)
         c.update()
-
 
     def checkNeighbours(self):
         topIndex = index(self.i-1, self.j)
@@ -133,7 +138,7 @@ class Stack:
 
 
 board = Tk()
-c = Canvas(board, width=600, height=600, bg="gray")  # creates Canvas
+c = Canvas(board, width=sizeOfMaze, height=sizeOfMaze, bg="gray")  # creates Canvas
 c.pack()
 stack = Stack()  # visited tiles will be on this stack
 
@@ -151,4 +156,3 @@ for i in grid:
 currentTile = grid[0]  # picks the tile we start from
 printMaze(currentTile)  # the fun part!
 c.mainloop()
-
