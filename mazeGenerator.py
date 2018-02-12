@@ -1,20 +1,22 @@
 '''
 Recursive Maze Generator
 Author: Filip Hein
-5.02.2018r.
+12.02.2018
 '''
 
 
 from tkinter import *
 import random
 import sys
+import time
+
 
 sys.setrecursionlimit(10000)
 global stack
-sizeOfTile = 10
+sizeOfTile = 30
 sizeOfMaze = 600  # value x value canvas size
 grid = []  # tile matrix
-time_ms = 0  # refresh time
+time_ms = 30  # refresh time
 
 
 def index(i, j):  # returns 1D index for 2D pseudomatrix
@@ -52,6 +54,28 @@ def printMaze(current):
         current.leadTile()
         current.show()
         printMaze(stack.pop())  # go back to the last tile
+    else:
+        print("Maze done!")
+        return 0
+
+
+def printMazeSmallStack(current):  # doesn't push to stack if no nbs after the last one
+    current.visited = True
+    nextTile = current.randomNeighbour()
+    if nextTile != -1:  # if nextTile exists
+        nextTile.visited = True
+        for i in current.neighbours:
+            if not i.visited:
+                stack.push(current)  # push to stack
+                break
+        deleteWall(current, nextTile)
+        current.leadTile()  # print leadTile
+        current.show()
+        printMazeSmallStack(nextTile)  # recursively go to the next tile
+    elif not stack.isEmpty():  # if stack is not empty
+        current.leadTile()
+        current.show()
+        printMazeSmallStack(stack.pop())  # go back to the last tile
     else:
         print("Maze done!")
         return 0
@@ -140,7 +164,7 @@ class Stack:
 board = Tk()
 board.title("Maze Generator using DFS and Backtracking")
 c = Canvas(board, width=sizeOfMaze, height=sizeOfMaze, bg="gray")  # creates Canvas
-c.create_text(sizeOfMaze-60, sizeOfMaze-10, font="ComicSansMS 10", text="Created by FH")
+c.create_text(sizeOfMaze-60, sizeOfMaze-10, font="Arial 10", text="Created by FH")
 c.pack()
 stack = Stack()  # visited tiles will be on this stack
 
@@ -156,5 +180,9 @@ for i in grid:
     i.checkNeighbours()  # goes through all tiles, fills neighbours array in each
 
 currentTile = grid[0]  # picks the tile we start from
-printMaze(currentTile)  # the fun part!
+start_time = time.time()
+
+# printMaze(currentTile)  # the fun part!
+printMazeSmallStack(currentTile)  # the fun part!
+print("{} seconds".format(time.time()-start_time))
 c.mainloop()
