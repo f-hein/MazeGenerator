@@ -138,7 +138,9 @@ class Stack:
 
 
 board = Tk()
+board.title("Maze Generator using DFS and Backtracking")
 c = Canvas(board, width=sizeOfMaze, height=sizeOfMaze, bg="gray")  # creates Canvas
+c.create_text(sizeOfMaze-60, sizeOfMaze-10, font="ComicSansMS 10", text="Created by FH")
 c.pack()
 stack = Stack()  # visited tiles will be on this stack
 
