@@ -1,7 +1,7 @@
 '''
 Recursive Maze Generator
 Author: Filip Hein
-12.02.2018
+22.02.2018
 '''
 
 
